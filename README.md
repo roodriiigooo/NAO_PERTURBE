@@ -223,7 +223,7 @@ Apesar dos mecanismos de contingência, Bluetooth enfrenta desafios em ambientes
    - Dois rádios NRF24L01 são usados simultaneamente, cobrindo metade dos canais cada, garantindo cobertura rápida.
 
 ### **Código Fonte**
-
+Utilize a Arduinno IDE:
 ```cpp
 #include "RF24.h"
 #include <SPI.h>
