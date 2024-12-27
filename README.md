@@ -91,7 +91,7 @@ O Bluetooth opera na faixa de **2.4 GHz** a **2.480 GHz**, dividida em **79 cana
    - A faixa é dividida em 79 canais de 1 MHz cada.
 2. Salto de Frequência (Frequency Hopping):
    - Para evitar interferências, o Bluetooth usa um sistema de salto de frequência adaptativo (AFH - Adaptive Frequency Hopping).
-   - le alterna entre os canais disponíveis até 1.600 vezes por segundo, garantindo que o dispositivo não permaneça por muito tempo em um canal com interferência.
+   - Alterna entre os canais disponíveis até 1.600 vezes por segundo, garantindo que o dispositivo não permaneça por muito tempo em um canal com interferência.
 
 
 
@@ -232,7 +232,7 @@ bool hasError = false;
 // Função de configuração inicial
 void setup() {
   pinMode(ledPin, OUTPUT);
-  digitalWrite(ledPin, LOW); // Inicialmente o LED fica apagado
+  digitalWrite(ledPin, LOW); // Inicialmente o LED (ESP32) fica apagado
   Serial.begin(115200);
 
   // Desativa Wi-Fi e Bluetooth do ESP32 para evitar interferência
