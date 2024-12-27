@@ -8,12 +8,12 @@
 > > Se tentar reproduzir, faça por conta e risco. Você foi avisado ♥
 > >
 > > 
-> > Para reproduzir este estudo é necessário conhecimento prévio das tecnnologias aqui descritas, ferramentas e como utilizá-las
+> > Para reproduzir este estudo é necessário conhecimento prévio das tecnnologias aqui descritas, ferramentas e como utilizá-las.
 
 
 ## **Introdução**
 
-O protocolo Bluetooth, amplamente utilizado para comunicação sem fio em dispositivos móveis e IoT, é projetado para operar em um ambiente ruidoso com mecanismos como salto de frequência e correção de erros. Apesar dessas características, é possível interromper ou degradar significativamente a comunicação Bluetooth utilizando um dispositivo de baixo custo, como um **ESP32** e módulos **NRF24L01**. Este estudo explora a construção de um jammer Bluetooth, sua implementação prática e estratégias para maximizar sua eficácia.
+O protocolo Bluetooth, amplamente utilizado para comunicação sem fio em dispositivos móveis e IoT, é projetado para operar em um ambiente ruidoso com mecanismos como salto de frequência e correção de erros. Apesar dessas características, é possível interromper ou degradar significativamente a comunicação Bluetooth utilizando um dispositivo de baixo custo, como um **ESP32** e módulos **NRF24L01**. Este estudo explora a compreensão de funcionamento do Bluetooth e a construção de um jammer, sua implementação prática e estratégias para maximizar sua eficácia.
 
 ---
 
@@ -28,51 +28,72 @@ O protocolo Bluetooth, amplamente utilizado para comunicação sem fio em dispos
 ## **Materiais Necessários**
 
 - 1x ESP32 (com LED azul para indicação de status).
-- 2x Módulos NRF24L01+ com antena externa (para maior alcance).
-- 2x Capacitores eletrolíticos de 100uf 16v 
-- Fios jumper e protoboard (opcional).
+- 2x Módulos NRF24L01 ou NRF24L01 +PA +LNA com antena externa.
+- 2x Capacitores eletrolíticos de 100uf 16v. 
+- Fios jumper Femea x Femea.
 - Software Arduino IDE (com bibliotecas RF24 instaladas).
 - 1x Telefone Celular
-- 1x Caixa de Som com recurso Bluetooth ou Fonnes de Ouvido
+- 1x Caixa de som ou fones de ouvido com recurso Bluetooth.
+
+
+## **Justificativa Para a Escolha Deste Hardware**
+
+### **Por que o ESP32 WROOM DEVKIT V1?**
+1. Capacidade de processamento e conectividade integrada.
+2. Compatível com o Arduino IDE.
+3. Baixo custo e amplo suporte da comunidade.
+
+### **Por que NRF24L01 +PA + LNA?**
+1. Faixa de 2.4 GHz com amplificador.
+2. Sensibilidade melhorada.
+3. Custo acessível.
+
 
 ---
+
+
 
 ## **Montagem do Laboratório**
 
 ### Pinagem ESP32 -> 2x nRF24L01
 
+<div align="center">
+
+
 Utilize os jumpers para conectar cada pino em sua respectiva posição seguindo a tabela:
 
-### HSPI
-| Primeiro nRF24L01 | HSPI (ESP32) | 100uf capacitor |
-|---------------|------------------|--------------------|
-| VCC           | 3.3V             | (+) capacitor |
-| GND           | GND              | (-) capacitor |
-| CE            | GPIO 16          |
-| CSN           | GPIO 15          |
-| SCK           | GPIO 14          |
-| MOSI          | GPIO 13          |
-| MISO          | GPIO 12          |
-| IRQ           | Não Conectado    |
+| NRF24L01 | HSPI (ESP32) | VSPI (ESP32) | 100uf capacitor |
+|---------------|------------------|------------------|--------------------|
+| VCC           | 3.3V             | 3.3V             | (+) capacitor |
+| GND           | GND              | GND              | (-) capacitor |
+| CE            | GPIO 16          | GPIO 22          | |
+| CSN           | GPIO 15          | GPIO 21          | |
+| SCK           | GPIO 14          | GPIO 18          | |
+| MOSI          | GPIO 13          | GPIO 23          | |
+| MISO          | GPIO 12          | GPIO 19          | |
+| IRQ           | Não Conectado    | Não Conectado    | |
 
-### VSPI 
-| Segundo nRF24L01 | VSPI (ESP32) | 100uf capacitor |
-|---------------|------------------|--------------------|
-| VCC           | 3.3V             | (+) capacitor |
-| GND           | GND              | (-) capacitor |
-| CE            | GPIO 22          |
-| CSN           | GPIO 21          |
-| SCK           | GPIO 18          |
-| MOSI          | GPIO 23          |
-| MISO          | GPIO 19          |
-| IRQ           | Não Conectado    |
+</div>
+
+<p align="center"><em>Legenda: Esta tabela mostra a instalação dos módulos NRF24L01 usando HSPI e VSPI.</em></p>
 
 
 ---
 
-## **Configuração e Teoria**
+# **Configuração e Teoria**
 
 O Bluetooth opera na faixa de **2.4 GHz** a **2.480 GHz**, dividida em **79 canais de 1 MHz**. Dispositivos Bluetooth utilizam **salto de frequência** para alternar entre canais até **1.600 vezes por segundo**, minimizando interferências.
+
+
+## **Frequência de Operação**
+1. Faixa de Frequência:
+   - Bluetooth opera entre 2.4 GHz e 2.4835 GHz, dentro do espectro de frequência ISM (Industrial, Scientific and Medical), que é de uso livre na maioria dos países.
+   - A faixa é dividida em 79 canais de 1 MHz cada.
+2. Salto de Frequência (Frequency Hopping):
+   - Para evitar interferências, o Bluetooth usa um sistema de salto de frequência adaptativo (AFH - Adaptive Frequency Hopping).
+   - le alterna entre os canais disponíveis até 1.600 vezes por segundo, garantindo que o dispositivo não permaneça por muito tempo em um canal com interferência.
+
+
 
 Os canais entre 0 e 79 no espectro de 2.400 GHz a 2.480 GHz correspondem à faixa de frequências ISM (Industrial, Scientific, and Medical), amplamente usada por diversos dispositivos de comunicação sem fio. Abaixo estão os serviços mais comuns que operam nessa faixa e como eles podem ser impactados pelo teste:
 
@@ -119,8 +140,62 @@ Impacto:
 O teste pode interferir na transmissão de dados ou controle remoto desses dispositivos.
 
 
+##  **Mecanismos de Contingência para Minimização de Ruído**
+Bluetooth utiliza diversas estratégias para minimizar os impactos de ruído e interferências, garantindo uma comunicação confiável:
+
+1. **Adaptive Frequency Hopping (AFH)**
+   - Como Funciona:
+     - O Bluetooth verifica a qualidade de cada canal e evita aqueles que estão congestionados ou com interferência.
+     - O AFH reduz significativamente o impacto de interferências de outras tecnologias na mesma faixa, como Wi-Fi e fornos micro-ondas.
+   - Benefício:
+     - Melhora a eficiência do uso da faixa de frequência e reduz colisões com outros sinais.
+
+2. **Forward Error Correction (FEC)**
+   - Como Funciona:
+     - Dados transmitidos incluem bits adicionais para detectar e corrigir erros causados por ruído no canal.
+     - Utiliza algoritmos de correção como Hamming Code e CRC (Cyclic Redundancy Check).
+   - Benefício:
+     - Permite recuperar informações danificadas sem a necessidade de retransmissão, otimizando a comunicação.
+3. **Potência de Transmissão Adaptativa**
+   - Como Funciona:
+     - O Bluetooth ajusta automaticamente a potência de transmissão para o nível mínimo necessário para manter a comunicação.
+     - Reduz interferências com outros dispositivos e economiza energia.
+   - Benefício:
+     - Minimiza o consumo de energia e a interferência com outros dispositivos na mesma faixa.
+4. **Redundância de Dados**
+   - Como Funciona:
+     - Pacotes de dados podem ser duplicados e enviados novamente se não forem confirmados pelo receptor.
+     - Em sistemas BLE (Bluetooth Low Energy), isso ocorre em níveis diferentes para otimizar o desempenho.
+   - Benefício:
+     - Garante alta confiabilidade na transmissão, especialmente em ambientes ruidosos.
+5. **Modulação GFSK**
+   - Como Funciona:
+     - O Bluetooth clássico utiliza a modulação Gaussian Frequency-Shift Keying (GFSK), que é eficiente em termos de espectro e resistente ao ruído.
+     - O BLE (Bluetooth Low Energy) utiliza modulação Gaussian Minimum Shift Keying (GMSK) para eficiência energética e estabilidade.
+   - Benefício:
+     - Reduz a susceptibilidade ao ruído e melhora a eficiência espectral.
+
+## **Perfis de Uso**
+Bluetooth suporta vários perfis para diferentes tipos de aplicações:
+   - A2DP (Advanced Audio Distribution Profile): Streaming de áudio em alta qualidade.
+   - HFP (Hands-Free Profile): Comunicação de voz, como chamadas telefônicas.
+   - GATT (Generic Attribute Profile): Transmissão de dados em BLE, usado em dispositivos IoT e sensores.
+
+## **Desafios e Limitações**
+Apesar dos mecanismos de contingência, Bluetooth enfrenta desafios em ambientes de alta densidade de dispositivos:
+1. **Interferências em Ambientes Ruidosos:**
+   - Embora o AFH reduza a interferência, em locais com muitos dispositivos na faixa de 2.4 GHz, a comunicação pode ser degradada.
+2. **Impacto do Multipercurso:**
+   - Reflexões de sinal em ambientes internos podem causar cancelamento ou atenuação de sinais.
+3. **Alcance Limitado:**
+   - Em ambientes abertos, o alcance médio (depende de hardware) pode ser de até 100 metros (com potência máxima), mas é significativamente menor em ambientes internos.
+
+---
+
+## **Implementação da Firmware**
+
 ### **Estratégias Aplicadas**
-1. **Sinal Portadora Contínua**:
+1. **Sinal de Emissão Contínua**:
    - Utiliza o método `startConstCarrier()` para gerar um sinal constante em cada canal, saturando-o.
 
 2. **Saltos de Canal Aleatórios**:
@@ -128,10 +203,6 @@ O teste pode interferir na transmissão de dados ou controle remoto desses dispo
 
 3. **Divisão de Faixa**:
    - Dois rádios NRF24L01 são usados simultaneamente, cobrindo metade dos canais cada, garantindo cobertura rápida.
-
----
-
-## **Implementação**
 
 ### **Código Fonte**
 
@@ -187,7 +258,7 @@ bool initSP() {
     radio1.setPALevel(RF24_PA_MAX, true);
     radio1.setDataRate(RF24_2MBPS);
     radio1.setCRCLength(RF24_CRC_DISABLED);
-    radio1.startConstCarrier(RF24_PA_MAX, ch_vspi); // Portadora contínua
+    radio1.startConstCarrier(RF24_PA_MAX, ch_vspi); // Emissão contínua
     return true;
   } else {
     Serial.println("Erro ao inicializar VSPI");
@@ -206,7 +277,7 @@ bool initHP() {
     radio.setPALevel(RF24_PA_MAX, true);
     radio.setDataRate(RF24_2MBPS);
     radio.setCRCLength(RF24_CRC_DISABLED);
-    radio.startConstCarrier(RF24_PA_MAX, ch_hspi); // Portadora contínua
+    radio.startConstCarrier(RF24_PA_MAX, ch_hspi); // Emissão contínua
     return true;
   } else {
     Serial.println("Erro ao inicializar HSPI");
@@ -273,12 +344,16 @@ Este código é capaz de testar canais entre 2 e 79. Esses valores estão dentro
 Com esta programação, o dispositivo gerado no laboratório pode interferir principalmente em Wi-Fi, Bluetooth, Zigbee e dispositivos ISM. A gravidade varia com proximidade, potência, e condições do ambiente.
 
 1. NRF24L01 e sua faixa de operação:
-   - Cada canal corresponde a uma frequência, calculada como 2.400 GHz +n x 1MHz, onde n é o número do canal.
+   - Cada canal corresponde a uma frequência, calculada como 2.400 GHz + **n** x 1 MHz, onde **n** é o número do canal.
+     - Exemplos:
+       - Canal 2: 2.400 GHz + 2 MHz = 2.402 GHz
+       - Canal 79: 2.400 GHz + 79MHz = 2.479 GHz
+
 2. Canais fora do intervalo 2-79:
-   - Embora o NRF24L01 suporte canais de 0 a 127, o código está configurado para operar principalmente dentro da faixa de 2 a 79, porque canais muito baixos (0-1) ou altos (80-127) são menos usados para evitar interferências com outras aplicações (e fugir do escopo do estudo).
+   - Embora o NRF24L01 suporte canais de 0 a 127, o código está configurado para operar principalmente dentro da faixa de 2 a 79, porque canais muito baixos (0-1) ou altos (80-127) não serão usados para evitar interferências com outras aplicações (e fugir do escopo do estudo).
 
 
-Antes de transferir o código para o ESP32 ou após transferido, antes de liga-lo/reiniciar, reproduza um audio no telefone celular e efetue o pareamento com um dispositivo bluetooth que reproduza o audio.
+Antes de transferir o código para o ESP32 ou após transferido, antes de liga-lo/reiniciar, reproduza um audio no telefone celular e efetue o pareamento com um dispositivo bluetooth de forma em que o dispositivo reproduza o audio.
 Um apreamento com outros dispositivos com o mesmo propósito pode ser feito em conjunto, desde que estejam próximos.
 
 Inicie sua ESP32.
@@ -288,9 +363,10 @@ Inicie sua ESP32.
 
 1. **Interferência Contínua**:
    - Comunicação Bluetooth em dispositivos próximos será degradada ou interrompida.
+   - Comunicação em dispositivos próximos que utilizam a mesma faixa de frequência do estudo será degradada ou interrompida.
 
 2. **Eficiência Contra Sistemas Adaptativos**:
-   - A lógica de saltos aleatórios e portadora contínua dificulta a recuperação de dispositivos adaptativos.
+   - A lógica de saltos aleatórios e emissão contínua dificulta a recuperação de dispositivos adaptativos.
 
 3. **Cobertura Completa**:
    - Todos os canais Bluetooth (0-78) são cobertos rapidamente por dois rádios operando simultaneamente.
@@ -327,7 +403,7 @@ Embora este estudo explore a implementação de um jammer, é igualmente importa
 
 ## **Conclusão**
 
-Este estudo demonstrou a eficácia de dispositivos de baixo custo, como ESP32 e NRF24L01, para interromper comunicações Bluetooth. A combinação de saltos aleatórios, portadora contínua e lógica otimizada garantiu interferência significativa, mesmo contra sistemas adaptativos. No entanto, deve-se ressaltar que o uso de jammers é **estritamente regulado** e deve ser realizado apenas em ambientes controlados e autorizados.
+Este estudo demonstrou a eficácia de dispositivos de baixo custo, como ESP32 e NRF24L01, para interromper comunicações Bluetooth. A combinação de saltos aleatórios, emissão contínua e lógica otimizada garantiu interferência significativa, mesmo contra sistemas adaptativos. No entanto, deve-se ressaltar que o uso de jammers é **estritamente regulado** e deve ser realizado apenas em ambientes controlados e autorizados.
 
 ---
 
@@ -361,6 +437,18 @@ Este estudo demonstrou a eficácia de dispositivos de baixo custo, como ESP32 e 
 12. XU, W.; MA, K.; TRAPPE, W. Jamming Sensor Networks: Attack and Defense Strategies. IEEE Network, 2005. Disponível em: <https://scholarcommons.sc.edu/cgi/viewcontent.cgi?article=1018&context=csce_facpub>. Acesso em: 23 dez. 2024.
 
 13. WECKERT, J. Ethics and Information Technology: Interference in Networks. Springer, 2000. ISBN: 9781402087986.
+
+14. Bluetooth SIG. Bluetooth Core Specification v5.3. Disponível em: <https://www.bluetooth.com/specifications/bluetooth-core-specification/>.
+
+15. Stallings, W. Wireless Communications & Networks. 2ª ed. Pearson, 2005. ISBN: 978-0131918351.
+
+16. Nordic Semiconductor. Bluetooth Low Energy Fundamentals. Disponível em: <https://www.nordicsemi.com/Products/Bluetooth-Low-Energy>. 
+
+17. IEEE. IEEE 802.15.1 Standard for Wireless Medium Access Control (MAC) and Physical Layer (PHY) Specifications for Wireless Personal Area Networks (WPAN). Disponível em: <https://standards.ieee.org/standard/802_15_1-2005.html>. 
+
+18. Ghosh, A., Rappaport, Next Generation Wireless LANs: 802.11n and 802.11ac. ISBN: 9781107016767.
+
+19. Pozar, D. M. Microwave Engineering. 4ª ed. Wiley, 2011. ISBN: 9780470631553.
 
 ---
 
