@@ -54,20 +54,28 @@ O protocolo Bluetooth, amplamente utilizado para comunicação sem fio em dispos
 
 
 ## **Montagem do Laboratório**
-
-### Pinagem ESP32 -> 2x nRF24L01
+Neste ponto iniciamos a montagem e programação do dispositivo que utilizaremos no estudo, tenha em mente que para replicar o estudo é necessário conhecimento básico sobre Arduino IDE e como instalar as bibliotecas necessárias. Abaixo a pinagem dos componentes para orientação inicial:
 
 <div align="center">
 
+<p align="center"><img src="https://github.com/roodriiigooo/NAO_PERTURBE/raw/main/img/pinout.jpg?raw=true" ></br> <em>Imagem: Ilustração da pinagem do ESP32 e NRF24L01</em> </p>
 
-Utilize os jumpers para conectar cada pino em sua respectiva posição seguindo a tabela:
+</div>
+
+
+
+Faça a soldagem ou utilize os jumpers para conectar cada pino em sua respectiva posição seguindo a tabela (não se esqueça dos capacitores):
+
+
+<div align="center">
+
 
 | NRF24L01 | HSPI (ESP32) | VSPI (ESP32) | 100uf capacitor |
 |---------------|------------------|------------------|--------------------|
 | VCC           | 3.3V             | 3.3V             | (+) capacitor |
 | GND           | GND              | GND              | (-) capacitor |
 | CE            | GPIO 16          | GPIO 22          | |
-| CSN           | GPIO 15          | GPIO 21          | |
+| CNS           | GPIO 15          | GPIO 21          | |
 | SCK           | GPIO 14          | GPIO 18          | |
 | MOSI          | GPIO 13          | GPIO 23          | |
 | MISO          | GPIO 12          | GPIO 19          | |
@@ -75,10 +83,20 @@ Utilize os jumpers para conectar cada pino em sua respectiva posição seguindo 
 
 </div>
 
-<p align="center"><em>Legenda: Esta tabela mostra a instalação dos módulos NRF24L01 usando HSPI e VSPI.</em></p>
+<p align="center"><em>Tabela: Mostra a instalação dos módulos NRF24L01 usando HSPI e VSPI.</em></p>
+
+<div align="center">
+
+Ilustração simplificada para melhor entendimento da configuração demonstrada na **Tabela**:
+<p align="center"><img src="https://github.com/roodriiigooo/NAO_PERTURBE/raw/main/img/pinout_1.jpg?raw=true" ></br> <em>Imagem: Ilustração da montagem do dispositivo</em> </p>
+
+
+</div>
+
 
 
 ---
+
 
 # **Configuração e Teoria**
 
