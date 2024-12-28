@@ -8,7 +8,7 @@
 > > Se tentar reproduzir, faça por conta, responsabilidade e risco. Você foi avisado ♥
 > >
 > > 
-> > Para reproduzir este estudo é necessário conhecimento prévio das tecnnologias aqui descritas, ferramentas e como utilizá-las.
+> > Para reproduzir este estudo é necessário conhecimento prévio das tecnologias aqui descritas, ferramentas e como utilizá-las.
 
 
 ## **Introdução**
