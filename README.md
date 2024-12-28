@@ -3,9 +3,9 @@
 
 ---
 
-## :heavy_exclamation_mark::heavy_exclamation_mark:  ATENÇÃO
-> De **roodriiigooo**: Este estudo foi conduzido em um laboratório isolado! A utilização deste tipo de dispositivo de forma não autorizada, sem supervisão ou feita de forma amadora é considerada crime segunndo o artigo 183 da lei 9.472/1997 (LGT) e tem consequências. Portanto se busca reproduzir este estudo, certifique-se de que o ambiente é isolado e controlado.
-> > Se tentar reproduzir, faça por conta e risco. Você foi avisado ♥
+## :heavy_exclamation_mark::heavy_exclamation_mark:  ATENÇÃO - Aviso de Responsabilidade
+> De **roodriiigooo (Autor)**: Este estudo foi conduzido em um laboratório isolado! A utilização deste tipo de dispositivo de forma não autorizada, sem supervisão ou feita de forma amadora é considerada crime segundo o artigo 183 da lei 9.472/1997 (LGT) e tem consequências. Portanto se busca reproduzir este estudo, certifique-se de que o ambiente é isolado e controlado. O autor não se responsabiliza por quaisquer ato irresponsável!
+> > Se tentar reproduzir, faça por conta, responsabilidade e risco. Você foi avisado ♥
 > >
 > > 
 > > Para reproduzir este estudo é necessário conhecimento prévio das tecnnologias aqui descritas, ferramentas e como utilizá-las.
