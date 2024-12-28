@@ -4,7 +4,7 @@
 ---
 
 ## :heavy_exclamation_mark::heavy_exclamation_mark:  ATENÇÃO - Aviso de Responsabilidade
-> De **roodriiigooo (Autor)**: Este estudo foi conduzido em um laboratório isolado! A utilização deste tipo de dispositivo de forma não autorizada, sem supervisão ou feita de forma amadora é considerada crime segundo o artigo 183 da lei 9.472/1997 (LGT) e tem consequências. Portanto se busca reproduzir este estudo, certifique-se de que o ambiente é isolado e controlado. O autor não se responsabiliza por quaisquer ato irresponsável!
+> De **roodriiigooo (Autor)**: Este estudo foi conduzido em um laboratório isolado! A utilização deste tipo de dispositivo de forma não autorizada, sem supervisão ou feita de forma amadora é considerada crime segundo o artigo 183 da lei 9.472/1997 (LGT) e tem consequências. Portanto se busca reproduzir este estudo, certifique-se de que o ambiente é isolado e controlado. O autor não se responsabiliza por quaisquer atos irresponsáveis!
 > > Se tentar reproduzir, faça por conta, responsabilidade e risco. Você foi avisado ♥
 > >
 > > 
@@ -13,7 +13,7 @@
 
 ## **Introdução**
 
-O protocolo Bluetooth, amplamente utilizado para comunicação sem fio em dispositivos móveis e IoT, é projetado para operar em um ambiente ruidoso com mecanismos como salto de frequência e correção de erros. Apesar dessas características, é possível interromper ou degradar significativamente a comunicação Bluetooth utilizando um dispositivo de baixo custo, como um **ESP32** e módulos **NRF24L01**. Este estudo explora a compreensão de funcionamento do Bluetooth e a construção de um jammer, sua implementação prática e estratégias para maximizar sua eficácia.
+O protocolo Bluetooth, amplamente utilizado para comunicação sem fio em dispositivos móveis e IoT, é projetado para operar em um ambiente ruidoso com mecanismos como salto de frequência e correção de erros. Apesar dessas características, é possível interromper ou degradar significativamente a comunicação Bluetooth utilizando um dispositivo de baixo custo, como um **ESP32** e módulos **NRF24L01**. Este estudo, apelidado de "Não Perturbe", explora a compreensão do funcionamento do Bluetooth e a construção de um jammer, sua implementação prática e estratégias para maximizar sua eficácia.
 
 ---
 
@@ -29,7 +29,7 @@ O protocolo Bluetooth, amplamente utilizado para comunicação sem fio em dispos
 
 - 1x ESP32 (com LED azul para indicação de status).
 - 2x Módulos NRF24L01 ou NRF24L01 +PA +LNA com antena externa.
-- 2x Capacitores eletrolíticos de 100uf 16v. 
+- 2x Capacitores eletrolíticos de 10uF a 100uf 16v. 
 - Fios jumper Femea x Femea.
 - Software Arduino IDE (com bibliotecas RF24 instaladas).
 - 1x Telefone Celular
