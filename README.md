@@ -222,7 +222,7 @@ Apesar dos mecanismos de contingência, Bluetooth enfrenta desafios em ambientes
 3. **Divisão de Faixa**:
    - Dois rádios NRF24L01 são usados simultaneamente, cobrindo metade dos canais cada, garantindo cobertura rápida.
 
-### **Código Fonte**
+### **Implementação da Firmware - Código Fonte**
 Utilize a Arduinno IDE:
 ```cpp
 #include "RF24.h"
