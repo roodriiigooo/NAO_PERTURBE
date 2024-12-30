@@ -618,7 +618,7 @@ void startWiFiInterference() {
 void startBLEInterference() {
   esp_bt_controller_enable(ESP_BT_MODE_BLE);
   esp_ble_gap_set_device_name("BAZINGA");
-  esp_ble_gap_config_adv_data_raw((uint8_t *)"BAZINGA", 6);
+  esp_ble_gap_config_adv_data_raw((uint8_t *)"BAZINGA", 7);
   esp_ble_gap_start_advertising(&(esp_ble_adv_params_t){
       .adv_int_min = 0x20,
       .adv_int_max = 0x30,
