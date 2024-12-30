@@ -161,32 +161,84 @@ O teste pode interferir na transmissão de dados ou controle remoto desses dispo
 ##  **Mecanismos de Contingência para Minimização de Ruído**
 Bluetooth utiliza diversas estratégias para minimizar os impactos de ruído e interferências, garantindo uma comunicação confiável:
 
-1. **Adaptive Frequency Hopping (AFH)**
-   - Como Funciona:
-     - O Bluetooth verifica a qualidade de cada canal e evita aqueles que estão congestionados ou com interferência.
-     - O AFH reduz significativamente o impacto de interferências de outras tecnologias na mesma faixa, como Wi-Fi e fornos micro-ondas.
-   - Benefício:
-     - Melhora a eficiência do uso da faixa de frequência e reduz colisões com outros sinais.
+1. **Frequency-Hopping Spread Spectrum (FHSS) e Adaptive Frequency Hopping (AFH)**
+   - FHSS (Frequency-Hopping Spread Spectrum):
+      - Definição: FHSS é uma técnica de modulação de espectro espalhado onde o transmissor e o receptor alternam entre diferentes frequências (ou canais) de forma pseudoaleatória, sincronizados por uma sequência pré-definida.
+      - Características:
+        - Constância:
+          - O padrão de salto é fixo e predefinido para ambos os dispositivos.
+        - Taxa de Salto:
+          - Frequências são alteradas a uma taxa regular, geralmente várias vezes por segundo.
+        - Resistência ao Ruído:
+          - Como o sinal salta entre canais, é menos provável que seja afetado por interferências contínuas em uma única frequência.
+        - Simplicidade:
+          - A técnica é simples de implementar, mas não considera as condições de interferência em tempo real.
+      - Vantagens:
+        - Oferece boa proteção contra interferências fixas.
+        - Funciona bem em ambientes onde o ruído é estático ou distribuído uniformemente.
+      - Desvantagens:
+        - Ineficaz contra interferências adaptativas, pois não avalia a qualidade dos canais.
+      - Uso:
+        - FHSS é usado em tecnologias mais antigas como o **Bluetooth Clássico (v1.0 a v2.0)**.
+   
+   - AFH (Adaptive Frequency Hopping):
+      - Definição: AFH é uma técnica de salto de frequência que ajusta dinamicamente o padrão de salto com base na qualidade dos canais. Ele evita canais com interferência e concentra-se nos canais limpos.
+      - Características:
+        - Dinamicidade:
+          - O padrão de salto não é fixo; é ajustado dinamicamente com base em medições de interferência.
+        - Qualidade dos Canais:
+          - Dispositivos analisam o espectro e excluem canais com alta interferência (ex.: Wi-Fi ou outros dispositivos Bluetooth).
+        - Melhor Eficiência:
+          - A transmissão evita colisões e aproveita melhor o espectro disponível.
+      - Vantagens:
+        - Reduz significativamente o impacto de interferências em ambientes densos.
+        - Otimiza a qualidade da conexão em tempo real.
+        - É compatível com sistemas coexistentes (ex.: Wi-Fi em 2.4 GHz).
+      - Desvantagens:
+        - Maior complexidade de implementação em comparação ao FHSS.
+        - Pode consumir mais recursos computacionais para análise de espectro.
+      - Uso:
+        - AFH é usado em **Bluetooth a partir da versão 1.2** e no **Bluetooth Low Energy (BLE)**
 
-2. **Forward Error Correction (FEC)**
+
+<div align="center">
+
+
+| Aspecto | FHSS	 | AFH |
+|---------------|------------------|--------------------|
+| Padrão de Salto	| Fixo e predefinido	  | Dinâmico e ajustado em tempo real |
+| Análise de Canais	| Não realiza	 | Realiza para evitar canais ruins |
+| Resistência a Ruído | Moderada  | Alta |
+| Complexidade  | Simples          | Alta |
+| Interferência  | Afetado por fontes adaptativas | Menos afetado |
+| Exemplos de Uso | Bluetooth Clássico v1.0/v1.1 | Bluetooth v1.2+, BLE |
+
+
+</div>
+
+<p align="center"><em>Quadro comparativo entre as duas tecnologias.</em></p>
+
+
+
+3. **Forward Error Correction (FEC)**
    - Como Funciona:
      - Dados transmitidos incluem bits adicionais para detectar e corrigir erros causados por ruído no canal.
      - Utiliza algoritmos de correção como Hamming Code e CRC (Cyclic Redundancy Check).
    - Benefício:
      - Permite recuperar informações danificadas sem a necessidade de retransmissão, otimizando a comunicação.
-3. **Potência de Transmissão Adaptativa**
+4. **Potência de Transmissão Adaptativa**
    - Como Funciona:
      - O Bluetooth ajusta automaticamente a potência de transmissão para o nível mínimo necessário para manter a comunicação.
      - Reduz interferências com outros dispositivos e economiza energia.
    - Benefício:
      - Minimiza o consumo de energia e a interferência com outros dispositivos na mesma faixa.
-4. **Redundância de Dados**
+5. **Redundância de Dados**
    - Como Funciona:
      - Pacotes de dados podem ser duplicados e enviados novamente se não forem confirmados pelo receptor.
      - Em sistemas BLE (Bluetooth Low Energy), isso ocorre em níveis diferentes para otimizar o desempenho.
    - Benefício:
      - Garante alta confiabilidade na transmissão, especialmente em ambientes ruidosos.
-5. **Modulação GFSK**
+6. **Modulação GFSK**
    - Como Funciona:
      - O Bluetooth clássico utiliza a modulação Gaussian Frequency-Shift Keying (GFSK), que é eficiente em termos de espectro e resistente ao ruído.
      - O BLE (Bluetooth Low Energy) utiliza modulação Gaussian Minimum Shift Keying (GMSK) para eficiência energética e estabilidade.
