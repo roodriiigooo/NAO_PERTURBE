@@ -358,14 +358,7 @@ bool initHP() {
 
 // Função para gerar payloads e alternar canais
 void jammerSweepBluetooth() {
-  // Gera payload aleatório para interferência adicional
-  char payload[32];
-  for (int i = 0; i < 32; i++) {
-    payload[i] = random(0, 256);
-  }
-
-  // Envia payload e alterna canal no HSPI
-  radio.write(&payload, sizeof(payload)); // Interferência ativa
+  // Alterna canal no HSPI
   if (flag_hspi) {
     ch_hspi -= random(1, 3); // Decremento aleatório
     if (ch_hspi < 0) {
@@ -380,9 +373,8 @@ void jammerSweepBluetooth() {
     }
   }
   radio.setChannel(ch_hspi);
-
-  // Envia payload e alterna canal no VSPI
-  radio1.write(&payload, sizeof(payload)); // Interferência ativa
+  
+  // Alterna canal no VSPI
   if (flag_vspi) {
     ch_vspi -= random(2, 5); // Decremento aleatório
     if (ch_vspi < 40) {
@@ -514,25 +506,197 @@ bool initHP() {
   }
 }
 
-// Alterna canais e envia payloads para interferência máxima
+// Função para gerar payloads e alternar canais aleatorios
 void jammerSweepBluetooth() {
-  char payload[32];
-  for (int i = 0; i < 32; i++) {
-    payload[i] = random(0, 256); // Preenche o payload com valores aleatórios
-  }
-
-  // Envia payloads para ambos os rádios no mesmo canal
-  radio.write(&payload, sizeof(payload));
-  radio1.write(&payload, sizeof(payload));
-
-  // Alterna para o próximo canal aleatório
   current_channel = random(0, max_channel + 1);
   radio.setChannel(current_channel);
   radio1.setChannel(current_channel);
+}
 
-  // Atualiza o sinal contínuo nos novos canais
-  radio.startConstCarrier(RF24_PA_MAX, current_channel);
-  radio1.startConstCarrier(RF24_PA_MAX, current_channel);
+// Indicação de erro com LED piscando
+void indicateError() {
+  digitalWrite(ledPin, HIGH);
+  delay(500);
+  digitalWrite(ledPin, LOW);
+  delay(500);
+}
+
+// Loop principal
+void loop() {
+  if (hasError) {
+    indicateError(); // Pisca LED em caso de erro
+  } else {
+    digitalWrite(ledPin, HIGH); // LED ligado para operação normal
+    jammerSweepBluetooth();     // Executa lógica de interferência
+  }
+}
+
+
+```
+
+
+### Em comparativo com `Estratégia A`, vantagens de não separar a cobertura:
+   - Maior Potência em Cada Canal:
+     - Ambos os rádios contribuem para saturar o mesmo canal, dificultando ainda mais a comunicação Bluetooth.
+   - Menor Latência de Mudança:
+     - Não há necessidade de cálculos ou ajustes independentes de canais, tornando os saltos mais rápidos.
+
+### Desvantagem Potencial
+   - Menor Cobertura Simultânea:
+     - Como ambos os rádios operam no mesmo canal, não há divisão de carga para cobrir dois canais ao mesmo tempo.
+
+
+---
+
+
+### **Estratégia C. - Utilizar os Transmissores do ESP32 em conjunto com NRF24L01**
+1. **Bluetooth LE Advertising Bombing:**
+   - Enviar pacotes de anúncio BLE (Bluetooth Low Energy) continuamente, ocupando os canais publicitários (37, 38 e 39) e impedindo conexões BLE de se estabelecerem.
+2. **(Sugestão não implementada) Wi-Fi Beacon Flooding:**
+   - Enviar quadros beacon ou pacotes de dados fictícios em todos os canais Wi-Fi (1 a 11), gerando ruído que interfere diretamente na faixa de 2.4 GHz.
+3. **Transmissão Simultânea:**
+   - Utilizar os rádios NRF24L01, o Bluetooth e o Wi-Fi (Não implementado) do ESP32 simultaneamente para gerar interferência ampla e densa.
+
+
+O código abaixo mostra como configurar o ESP32 para operar em modo Bluetooth, gerando interferência adicional à gerada pelos módulos NRF24L01:
+
+
+### **Implementação da Firmware - Código Fonte**
+Utilize a Arduinno IDE:
+```cpp
+#include "RF24.h"
+#include <SPI.h>
+#include "esp_bt.h"
+#include "esp_wifi.h"
+#include "esp_bt_main.h"
+#include "esp_gap_ble_api.h"
+
+// Configurações para dois módulos NRF24L01
+SPIClass *sp = nullptr;
+SPIClass *hp = nullptr;
+
+RF24 radio(16, 15, 16000000);   // HSPI
+RF24 radio1(22, 21, 16000000);  // VSPI
+
+// Configurações de canais e controle
+int ch_hspi = 0;  // Canal inicial para HSPI (0-39)
+int ch_vspi = 40; // Canal inicial para VSPI (40-78)
+bool flag_hspi = false;  // Direção de salto HSPI
+bool flag_vspi = true;   // Direção de salto VSPI
+
+// Pino do LED azul para indicação
+const int ledPin = 2;
+bool hasError = false;  // Indicador de erro
+
+// Função de configuração inicial
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  digitalWrite(ledPin, LOW); // Inicialmente o LED está apagado
+  Serial.begin(115200);
+
+  // Desativa Wi-Fi e Bluetooth do ESP32
+  esp_bt_controller_deinit();
+  esp_wifi_stop();
+  esp_wifi_deinit();
+  esp_wifi_disconnect();
+
+  // Inicializa os rádios NRF24L01
+  if (!initHP() || !initSP()) {
+    hasError = true; // Marca erro se algum rádio falhar
+  }
+}
+
+// Inicializa o rádio no barramento VSPI
+bool initSP() {
+  sp = new SPIClass(VSPI);
+  sp->begin();
+  if (radio1.begin(sp)) {
+    radio1.setAutoAck(false);
+    radio1.stopListening();
+    radio1.setRetries(0, 0);
+    radio1.setPALevel(RF24_PA_MAX, true);
+    radio1.setDataRate(RF24_2MBPS);
+    radio1.setCRCLength(RF24_CRC_DISABLED);
+    radio1.startConstCarrier(RF24_PA_MAX, ch_vspi); // Sinal contínuo
+    return true;
+  } else {
+    Serial.println("Erro ao inicializar VSPI");
+    return false;
+  }
+}
+
+// Inicializa o rádio no barramento HSPI
+bool initHP() {
+  hp = new SPIClass(HSPI);
+  hp->begin();
+  if (radio.begin(hp)) {
+    radio.setAutoAck(false);
+    radio.stopListening();
+    radio.setRetries(0, 0);
+    radio.setPALevel(RF24_PA_MAX, true);
+    radio.setDataRate(RF24_2MBPS);
+    radio.setCRCLength(RF24_CRC_DISABLED);
+    radio.startConstCarrier(RF24_PA_MAX, ch_hspi); // Sinal contínuo
+    return true;
+  } else {
+    Serial.println("Erro ao inicializar HSPI");
+    return false;
+  }
+}
+
+// Inicia BLE Advertising Bombing
+void startBLEInterference() {
+  esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
+  esp_bt_controller_init(&bt_cfg);
+  esp_bt_controller_enable(ESP_BT_MODE_BLE);
+  esp_bluedroid_init();
+  esp_bluedroid_enable();
+
+  esp_ble_adv_params_t adv_params = {
+      .adv_int_min = 0x20,
+      .adv_int_max = 0x40,
+      .adv_type = ADV_TYPE_NONCONN_IND,
+      .channel_map = ADV_CHNL_ALL};
+
+  uint8_t adv_data[] = {'B', 'A', 'Z', 'I', 'N', 'G', 'A'};
+  esp_ble_gap_config_adv_data_raw(adv_data, sizeof(adv_data));
+  esp_ble_gap_start_advertising(&adv_params);
+}
+
+// Função para gerar payloads e alternar canais
+void jammerSweepBluetooth() {
+  // Alterna canal no HSPI
+  if (flag_hspi) {
+    ch_hspi -= random(1, 3); // Decremento aleatório
+    if (ch_hspi < 0) {
+      ch_hspi = random(1, 5);
+      flag_hspi = false;
+    }
+  } else {
+    ch_hspi += random(1, 3); // Incremento aleatório
+    if (ch_hspi > 39) {
+      ch_hspi = 39;
+      flag_hspi = true;
+    }
+  }
+  radio.setChannel(ch_hspi);
+  
+  // Alterna canal no VSPI
+  if (flag_vspi) {
+    ch_vspi -= random(2, 5); // Decremento aleatório
+    if (ch_vspi < 40) {
+      ch_vspi = 40;
+      flag_vspi = false;
+    }
+  } else {
+    ch_vspi += random(2, 5); // Incremento aleatório
+    if (ch_vspi > 78) {
+      ch_vspi = 78;
+      flag_vspi = true;
+    }
+  }
+  radio1.setChannel(ch_vspi);
+  startBLEInterference();
 }
 
 // Indicação de erro com LED piscando
@@ -555,134 +719,28 @@ void loop() {
 
 ```
 
+Para controlar o recurso WiFi, ajuste o código de forma que:
 
-### Em comparativo com `Estratégia A`, vantagens de não separar a cobertura:
-   - Maior Potência em Cada Canal:
-     - Ambos os rádios contribuem para saturar o mesmo canal, dificultando ainda mais a comunicação Bluetooth.
-   - Menor Latência de Mudança:
-     - Não há necessidade de cálculos ou ajustes independentes de canais, tornando os saltos mais rápidos.
-
-### Desvantagem Potencial
-   - Menor Cobertura Simultânea:
-     - Como ambos os rádios operam no mesmo canal, não há divisão de carga para cobrir dois canais ao mesmo tempo.
-
-
----
-
-
-### **Estratégia C. - Utilizar os Transmissores do ESP32 em conjunto com NRF24L01**
-1. **Bluetooth LE Advertising Bombing:**
-   - Enviar pacotes de anúncio BLE (Bluetooth Low Energy) continuamente, ocupando os canais publicitários (37, 38 e 39) e impedindo conexões BLE de se estabelecerem.
-2. **Wi-Fi Beacon Flooding:**
-   - Enviar quadros beacon ou pacotes de dados fictícios em todos os canais Wi-Fi (1 a 11), gerando ruído que interfere diretamente na faixa de 2.4 GHz.
-3. **Transmissão Simultânea:**
-   - Utilizar os rádios NRF24L01, o Bluetooth e o Wi-Fi do ESP32 simultaneamente para gerar interferência ampla e densa.
-
-
-O código abaixo mostra como configurar o ESP32 para operar em modo Wi-Fi e Bluetooth, gerando interferência adicional à gerada pelos módulos NRF24L01:
-
-
-### **Implementação da Firmware - Código Fonte**
-Utilize a Arduinno IDE:
 ```cpp
-#include "RF24.h"
-#include <SPI.h>
-#include "esp_bt.h"
-#include "esp_wifi.h"
 
-// Configurações para dois módulos NRF24L01
-SPIClass *sp = nullptr;
-SPIClass *hp = nullptr;
-
-RF24 radio(16, 15, 16000000);   // HSPI
-RF24 radio1(22, 21, 16000000);  // VSPI
-
-// Configuração de canais e controle
-int current_channel = 0;  // Canal atual (0-78)
-const int max_channel = 78; // Canal máximo
-
-// Função para iniciar o Wi-Fi em modo Beacon Flooding
+// Inicia Wi-Fi Beacon Flooding
 void startWiFiInterference() {
-  esp_wifi_set_mode(WIFI_MODE_AP); // Configura Wi-Fi como Access Point
+  wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
+  esp_wifi_init(&cfg);
+  esp_wifi_set_mode(WIFI_MODE_AP);
   wifi_config_t ap_config = {};
-  strcpy((char *)ap_config.ap.ssid, "INTERNET");
-  ap_config.ap.ssid_len = strlen("INTERNET");
-  ap_config.ap.channel = 1; // Canal inicial (muda dinamicamente)
+  strcpy((char *)ap_config.ap.ssid, "INTERNET"); // Nome do ponto de acesso
+  ap_config.ap.channel = 1; // Canal de operação, alterne dinamicamente (1 a 11)
   ap_config.ap.authmode = WIFI_AUTH_OPEN;
-  ap_config.ap.max_connection = 4;
   esp_wifi_set_config(WIFI_IF_AP, &ap_config);
   esp_wifi_start();
 }
 
-// Função para gerar pacotes BLE Advertising Bombing
-void startBLEInterference() {
-  esp_bt_controller_enable(ESP_BT_MODE_BLE);
-  esp_ble_gap_set_device_name("BAZINGA");
-  esp_ble_gap_config_adv_data_raw((uint8_t *)"BAZINGA", 7);
-  esp_ble_gap_start_advertising(&(esp_ble_adv_params_t){
-      .adv_int_min = 0x20,
-      .adv_int_max = 0x30,
-      .adv_type = ADV_TYPE_NONCONN_IND,
-      .own_addr_type = BLE_ADDR_TYPE_RANDOM,
-      .peer_addr_type = BLE_ADDR_TYPE_PUBLIC,
-      .channel_map = ADV_CHNL_ALL,
-      .adv_filter_policy = ADV_FILTER_ALLOW_SCAN_ANY_CON_ANY});
-}
-
-// Inicializa os módulos NRF24L01
-void initNRF24() {
-  sp = new SPIClass(VSPI);
-  hp = new SPIClass(HSPI);
-  sp->begin();
-  hp->begin();
-  radio.begin(hp);
-  radio1.begin(sp);
-
-  // Configurações padrão para os rádios
-  radio.setAutoAck(false);
-  radio1.setAutoAck(false);
-  radio.setPALevel(RF24_PA_MAX);
-  radio1.setPALevel(RF24_PA_MAX);
-  radio.setDataRate(RF24_2MBPS);
-  radio1.setDataRate(RF24_2MBPS);
-}
-
-// Alterna canais dos rádios NRF24L01
-void jammerSweepBluetooth() {
-  char payload[32];
-  for (int i = 0; i < 32; i++) {
-    payload[i] = random(0, 256); // Preenche payload com valores aleatórios
-  }
-
-  // Envia payloads e alterna canais aleatoriamente
-  current_channel = random(0, max_channel + 1);
-  radio.write(&payload, sizeof(payload));
-  radio1.write(&payload, sizeof(payload));
-  radio.setChannel(current_channel);
-  radio1.setChannel(current_channel);
-}
-
-// Configuração inicial
-void setup() {
-  Serial.begin(115200);
-
-  // Inicia Wi-Fi e BLE para interferência
-  startWiFiInterference();
-  startBLEInterference();
-
-  // Inicializa os rádios NRF24L01
-  initNRF24();
-}
-
-// Loop principal
-void loop() {
-  jammerSweepBluetooth(); // Interferência contínua nos rádios
-  delay(50);              // Pequeno atraso para alternância eficiente
-}
-
-
 ```
 
+Com este ajuste torna-se possível expandir a geraração ruído através para o módulo WiFi integrado da ESP32.
+
+---
 
 ### Em comparativo com `Estratégia A e B:`
    - Interferência Wi-Fi com Beacon Flooding:
