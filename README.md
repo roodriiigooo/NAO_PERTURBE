@@ -4,7 +4,7 @@
 ---
 
 ## :heavy_exclamation_mark::heavy_exclamation_mark:  ATENÇÃO - Aviso de Responsabilidade
-> De **roodriiigooo (Autor)**: `> Este estudo foi conduzido em um laboratório isolado! A utilização deste tipo de dispositivo de forma não autorizada, sem supervisão ou feita de forma amadora é considerada crime segundo o artigo 183 da lei 9.472/1997 (LGT) e tem consequências. Portanto se busca reproduzir este estudo, certifique-se de que o ambiente é isolado e controlado. O autor não se responsabiliza por quaisquer atos irresponsáveis!`
+> De **roodriiigooo (Autor)**: `> Este estudo foi conduzido em um laboratório isolado! A utilização deste tipo de dispositivo de forma não autorizada, sem supervisão ou feita de forma amadora é considerada crime segundo o artigo 183 da lei 9.472/1997 (LGT) e tem consequências. Portanto se busca reproduzir este estudo, certifique-se de que o ambiente é isolado e controlado. **Este dispositivo pode afetar equipamentos/dispositivos críticos de uso médico!**. O autor não se responsabiliza por quaisquer atos irresponsáveis e suas consequências!`
 > > Se tentar reproduzir, faça por conta, responsabilidade e risco. Você foi avisado ♥
 > >
 > > 
