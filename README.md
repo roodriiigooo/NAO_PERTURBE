@@ -182,7 +182,7 @@ O teste pode interferir na transmissão de dados ou controle remoto desses dispo
      - **Classe 2**: Até 10 metros (mais comum em dispositivos pessoais).
      - **Classe 3**: Até 1 metro.
 6.**Conexões Simultâneas**:
-   - Geralmente limitado a 7 dispositivos ativos por piconet.
+   - Geralmente limitado a 7 dispositivos ativos por piconet (Piconet é uma rede Bluetooth formada por dispositivos que se organizam automaticamente para se comunicar, sem a necessidade de cabos ou infraestrutura de rede).
 
 **Aplicações Comuns**:
    - Fones de ouvido sem fio, caixas de som, controles de videogames, transferência de arquivos (como via Bluetooth FTP).
