@@ -4,16 +4,23 @@
 ---
 
 ## :heavy_exclamation_mark::heavy_exclamation_mark:  ATENÇÃO - Aviso de Responsabilidade
-> De **roodriiigooo (Autor)**: `> Este estudo foi conduzido em um laboratório isolado! A utilização deste tipo de dispositivo de forma não autorizada, sem supervisão ou feita de forma amadora é considerada crime segundo o artigo 183 da lei 9.472/1997 (LGT) e tem consequências. Portanto se busca reproduzir este estudo, certifique-se de que o ambiente é isolado e controlado. **Este dispositivo pode afetar equipamentos/dispositivos críticos de uso médico!**. O autor não se responsabiliza por quaisquer atos irresponsáveis e suas consequências!`
-> > Se tentar reproduzir, faça por conta, responsabilidade e risco. Você foi avisado ♥
+> De **roodriiigooo (Pesquisador/Autor)**: `> Este estudo foi conduzido em um laboratório isolado! A utilização deste tipo de dispositivo de forma não autorizada, sem supervisão ou feita de forma amadora é considerada crime segundo o artigo 183 da lei 9.472/1997 (LGT) e a Resolução Anatel nº 760 e tem consequências. Portanto se busca reproduzir este estudo, certifique-se de que o ambiente é isolado e controlado. O autor não se responsabiliza por quaisquer atos irresponsáveis e suas consequências!`
+> > **Este dispositivo (do estudo) também pode afetar equipamentos/dispositivos críticos e de uso médico!**
+>
+> LGT: [Lei 9.472/1997](https://informacoes.anatel.gov.br/legislacao/leis/2-lei-9472)
+> 
+> ANATEL: [Resolução nº 760, de 6 de fevereiro de 2023.](https://informacoes.anatel.gov.br/legislacao/resolucoes/2023/1842-resolucao-760#:~:text=Aprova%20o%20Regulamento%20sobre%20Bloqueador,lhe%20foram%20conferidas%20pelo%20art.)
+> > `**Ciente do que foi dito acima**:  Ao tentar reproduzir, você concorda com a sua responsabilidade`
+> >
+> > `Faça por conta, responsabilidade e risco. Você foi avisado ♥`
 > >
 > > 
-> > Para reproduzir este estudo é necessário conhecimento prévio das tecnologias aqui descritas, ferramentas e como utilizá-las.
+> >  Para reproduzir este estudo é necessário conhecimento prévio das tecnologias aqui descritas, ferramentas e como utilizá-las.
 
 
 ## **Introdução**
 
-O protocolo Bluetooth, amplamente utilizado para comunicação sem fio em dispositivos móveis e IoT, é projetado para operar em um ambiente ruidoso com mecanismos como salto de frequência e correção de erros. Apesar dessas características, é possível interromper ou degradar significativamente a comunicação Bluetooth utilizando um dispositivo de baixo custo, como um **ESP32** e módulos **NRF24L01**. Este estudo, apelidado de "Não Perturbe", explora a compreensão do funcionamento do Bluetooth e a construção de um jammer, sua implementação prática e estratégias para maximizar sua eficácia.
+O protocolo Bluetooth, amplamente utilizado para comunicação sem fio em dispositivos móveis e IoT, é projetado para operar em um ambiente ruidoso com mecanismos como salto de frequência e correção de erros. Apesar dessas características, é possível interromper ou degradar significativamente a comunicação Bluetooth utilizando um dispositivo de baixo custo, como um **ESP32** e módulos **NRF24L01**. Este estudo, apelidado de "Não Perturbe", explora a compreensão do funcionamento do Bluetooth e a construção de um jammer (Bloqueador de Sinal de Radiocomunicações - BSR), sua implementação prática e estratégias para maximizar sua eficácia e mitigação.
 
 ---
 
@@ -1091,4 +1098,4 @@ Este estudo demonstrou a eficácia de um dispositivo de baixo custo, construído
 
 ---
 
-**Este projeto tem finalidade exclusivamente educacional. Usar um jammer em redes públicas é ilegal e sujeito a penalidades.**
+**Este projeto tem finalidade exclusivamente educacional. Usar um dispositivo BLOQUEADOR DE SINAIS DE RADIOCOMUNICAÇÕES (BSR) é ilegal e sujeito a penalidades.**
