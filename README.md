@@ -18,6 +18,18 @@
 > >  Para reproduzir este estudo é necessário conhecimento prévio das tecnologias aqui descritas, ferramentas e como utilizá-las.
 
 
+---
+
+
+<div align="center">
+
+| [Introdução](#introdu%C3%A7%C3%A3o) | [Laboratório](#montagem-do-laborat%C3%B3rio) | [Teoria](#configura%C3%A7%C3%A3o-e-teoria) | [Implementação](#implementa%C3%A7%C3%A3o-da-firmware---estrat%C3%A9gias-a-b-e-c) | [Resultados](#resultados-esperados) | [Mitigação](#como-se-proteger-contra-este-tipo-de-ataque) | [Referências](#refer%C3%AAncias) |
+
+</div>
+
+
+
+
 ## **Introdução**
 
 O protocolo Bluetooth, amplamente utilizado para comunicação sem fio em dispositivos móveis e IoT, é projetado para operar em um ambiente ruidoso com mecanismos como salto de frequência e correção de erros. Apesar dessas características, é possível interromper ou degradar significativamente a comunicação Bluetooth utilizando um dispositivo de baixo custo, como um **ESP32** e módulos **NRF24L01**. Este estudo, apelidado de "Não Perturbe", explora a compreensão do funcionamento do Bluetooth e a construção de um jammer (Bloqueador de Sinal de Radiocomunicações - BSR), sua implementação prática e estratégias para maximizar sua eficácia e mitigação.
