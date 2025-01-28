@@ -3,23 +3,49 @@
 
 ---
 
-## :heavy_exclamation_mark::heavy_exclamation_mark:  ATENÇÃO - Aviso de Responsabilidade
+## :heavy_exclamation_mark::heavy_exclamation_mark:  ATENÇÃO - AVISO DE RESPONSABILIDADE
 > De **roodriiigooo (Pesquisador/Autor)**: `> Este estudo foi conduzido em um laboratório isolado! A utilização deste tipo de dispositivo de forma não autorizada, sem supervisão ou feita de forma amadora é considerada crime segundo o artigo 183 da lei 9.472/1997 (LGT) e a Resolução Anatel nº 760 e tem consequências. Portanto se busca reproduzir este estudo, certifique-se de que o ambiente é isolado e controlado. O autor não se responsabiliza por quaisquer atos irresponsáveis e suas consequências!`
-> > **Este dispositivo (do estudo) também pode afetar equipamentos/dispositivos críticos e de uso médico!**
->
+> >
 > LGT: [Lei 9.472/1997](https://informacoes.anatel.gov.br/legislacao/leis/2-lei-9472)
 > 
 > ANATEL: [Resolução nº 760, de 6 de fevereiro de 2023.](https://informacoes.anatel.gov.br/legislacao/resolucoes/2023/1842-resolucao-760#:~:text=Aprova%20o%20Regulamento%20sobre%20Bloqueador,lhe%20foram%20conferidas%20pelo%20art.)
-> > `**Ciente do que foi dito acima**:  Ao tentar reproduzir, você concorda com a sua responsabilidade`
-> >
-> > `Faça por conta, responsabilidade e risco. Você foi avisado ♥`
-> >
-> > 
-> >  Para reproduzir este estudo é necessário conhecimento prévio das tecnologias aqui descritas, ferramentas e como utilizá-las.
+
 
 
 ---
 
+## :heavy_exclamation_mark::heavy_exclamation_mark:  RISCOS A SAÚDE
+
+Um dispositivo BLOQUEADOR DE SINAIS DE RADIOCOMUNICAÇÕES (BSR/JAMMER) emite sinais de alta potência em frequências de rádio, gerando interferência eletromagnética que pode sobrecarregar ou confundir os circuitos eletrônicos sensíveis do marcapasso. Isso pode levar o dispositivo a interpretar falsamente sinais, alterar seu funcionamento normal ou entrar em modo de segurança.
+Os riscos incluem:
+1. Ritmo cardíaco irregular por erro na leitura dos sinais naturais do coração.
+2. Mau funcionamento temporário ou, em casos extremos, danos permanentes ao marcapasso.
+3. Potencial risco de vida para o paciente, dependendo da gravidade da interferência.
+   
+
+As informações fornecidas baseiam-se em princípios gerais de eletromagnetismo, engenharia de dispositivos médicos, e conhecimento técnico sobre interferência eletromagnética (EMI). Para fontes específicas, estudos como os publicados pela FDA (Food and Drug Administration) e organizações como a American Heart Association discutem os riscos de interferência em dispositivos médicos implantáveis. Além disso, normas como a IEC 60601-1-2 detalham a compatibilidade eletromagnética para dispositivos médicos.
+
+
+> ##### A interferência eletromagnética (EMI/BSR) gerada por dispositivos como jammers pode afetar o funcionamento de marcapassos, representando riscos significativos para indivíduos que dependem desses dispositivos. Os jammers emitem sinais de alta potência que podem sobrecarregar ou confundir os circuitos eletrônicos sensíveis dos marcapassos, levando a interpretações incorretas dos sinais cardíacos ou até mesmo à desprogramação do dispositivo. Isso pode resultar em arritmias, desmaios ou outras complicações graves para o paciente. Fonte: [Uol](https://www.uol.com.br/vivabem/noticias/redacao/2025/01/17/pode-afetar-marcapasso-alertam-especialistas-sobre-bloqueador-de-sinais.htm)
+> ##### Além disso, outras fontes de EMI/BSR, como eletrocautérios utilizados em procedimentos cirúrgicos, também podem interferir na função dos marcapassos. Nesses casos, é recomendada a monitorização eletrocardiográfica contínua e, preferencialmente, a reprogramação do dispositivo para um modo assíncrono durante o procedimento, a fim de evitar inibições temporárias de estimulação. Fonte: [SOCERJ](https://socerj.org.br/interferencia-marcapasso-mito-realidade/)
+> ##### É importante que pacientes com marcapassos estejam cientes das potenciais fontes de interferência eletromagnética em ambientes domésticos e tomem precauções adequadas. Por exemplo, embora a maioria dos eletrodomésticos não cause interferência significativa, é aconselhável não permanecer encostado em fornos de micro-ondas em funcionamento e evitar o uso de colchões magnéticos, que podem afetar o funcionamento do marcapasso. Fonte: [SEU CARDIO](https://seucardio.com.br/interferencias-no-marcapasso-em-casa/) 
+
+
+Em resumo, a exposição a fontes de EMI/BSR, especialmente jammers, pode comprometer a eficácia dos marcapassos e colocar em risco a saúde dos pacientes.
+
+
+-----
+<div align="center">
+
+**Ciente do que foi dito acima**:
+# **Ao tentar reproduzir, você assume a sua responsabilidade**
+**Faça por conta, responsabilidade e risco**
+
+
+</div>
+
+
+-----
 
 <div align="center">
 
@@ -33,6 +59,8 @@
 ## **Introdução**
 
 O protocolo Bluetooth, amplamente utilizado para comunicação sem fio em dispositivos móveis e IoT, é projetado para operar em um ambiente ruidoso com mecanismos como salto de frequência e correção de erros. Apesar dessas características, é possível interromper ou degradar significativamente a comunicação Bluetooth utilizando um dispositivo de baixo custo, como um **ESP32** e módulos **NRF24L01**. Este estudo, apelidado de "Não Perturbe", explora a compreensão do funcionamento do Bluetooth e a construção de um jammer (Bloqueador de Sinal de Radiocomunicações - BSR), sua implementação prática e estratégias para maximizar sua eficácia e mitigação.
+
+> >  Para reproduzir este estudo é necessário conhecimento prévio das tecnologias aqui descritas, ferramentas e como utilizá-las.
 
 ---
 
@@ -1110,4 +1138,4 @@ Este estudo demonstrou a eficácia de um dispositivo de baixo custo, construído
 
 ---
 
-**Este projeto tem finalidade exclusivamente educacional. Usar um dispositivo BLOQUEADOR DE SINAIS DE RADIOCOMUNICAÇÕES (BSR) é ilegal e sujeito a penalidades.**
+**Este projeto tem finalidade exclusivamente educacional. Usar um dispositivo BLOQUEADOR DE SINAIS DE RADIOCOMUNICAÇÕES (BSR) é ilegal e sujeito a [penalidades](#heavy_exclamation_markheavy_exclamation_mark--aten%C3%A7%C3%A3o---aviso-de-responsabilidade). Dispositivos BSR pode apresentar [riscos a saúde](#heavy_exclamation_markheavy_exclamation_mark--riscos-a-sa%C3%BAde).**
